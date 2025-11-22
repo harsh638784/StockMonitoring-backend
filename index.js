@@ -1,0 +1,105 @@
+// ==============================
+//  Imports & Initial Setup
+// ==============================
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+require("dotenv").config();
+
+const app = express();
+const PORT = 4000;
+const { MONGO_URL } = process.env;
+
+// ==============================
+//  Models
+// ==============================
+const  HoldingsModel  = require("./Models/HoldingModel");
+const OrdersModel = require("./Models/OrdersSchema");
+const  PositionsModel = require("./Models/PositionsSchema");
+
+// ==============================
+//  Routes
+// ==============================
+const authRoute = require("./Routes/AuthRoute");
+
+// ==============================
+//  Middlewares
+// ==============================
+app.use(cookieParser());
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, // Allow sending cookies/tokens
+  })
+);
+
+// ==============================
+//  API Endpoints
+// ==============================
+
+// 🔹 Fetch all holdings
+app.get("/allHoldings", async (req, res) => {
+  try {
+    const allHoldings = await HoldingsModel.find({});
+    res.json(allHoldings);
+    // console.log(allHoldings)
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch holdings" });
+  }
+});
+
+// 🔹 Fetch all positions
+app.get("/allPositions", async (req, res) => {
+  try {
+    const allPositions = await PositionsModel.find({});
+    res.json(allPositions);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch positions" });
+  }
+});
+app.get("/newOrders",async(req,res)=>{
+  try{
+    const orders=await OrdersModel.find({});
+    
+    res.json(orders);
+  }catch(err){
+ 
+    res.status(500).json({error:"Failed to fetch orders"});
+  }
+});
+// 🔹 Create a new order
+app.post("/newOrder", async (req, res) => {
+  try {
+    const { name, qty, price, mode } = req.body;
+    const newOrder = new OrdersModel({ name, qty, price, mode });
+    await newOrder.save();
+    res.send("Order saved successfully!");
+  } catch (err) {
+    console.error("Error saving order:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// 🔹 Auth routes
+app.use("/", authRoute);
+
+// ==============================
+//  Database Connection
+// ==============================
+mongoose
+  .connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected successfully"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// ==============================
+//  Server Start
+// ==============================
+app.listen(PORT, "localhost", () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
