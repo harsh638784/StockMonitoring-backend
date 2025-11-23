@@ -14,7 +14,7 @@ module.exports.Signup = async (req, res, next) => {
    res.cookie("token", token, {
   httpOnly: true,      // more secure
   secure: true,       // use true if using HTTPS
-  sameSite: "none",     // helps prevent CSRF
+  sameSite: "lax",     // helps prevent CSRF
 });
 
     res
@@ -43,7 +43,7 @@ module.exports.Login = async (req, res, next) => {
      res.cookie("token", token, {
      httpOnly: true,      // more secure
      secure: true,       // use true if using HTTPS
-     sameSite: "none",     // helps prevent CSRF
+     sameSite: "lax",     // helps prevent CSRF
      });
 
      res.status(201).json({ message: "User logged in successfully", success: true });
@@ -60,7 +60,7 @@ module.exports.Logout = (req, res) => {
   res.clearCookie('token', {
     httpOnly: true,
     secure: false, // Development ke liye false, Production (HTTPS) ke liye true
-    sameSite: 'none',
+    sameSite: 'lax',
     // path: '/' // Agar aapne login ke waqt path set kiya tha to yahan bhi karein
   });
   
