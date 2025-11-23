@@ -26,10 +26,21 @@ const authRoute = require("../Routes/AuthRoute");
 // ==============================
 app.use(cookieParser());
 app.use(express.json());
+
+const allowedOrigins = ["http://localhost:3000", "https://stock-monitoring-backend-gamma.vercel.app"];
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    credentials: true, // Allow sending cookies/tokens
+    origin: (origin, callback) => {
+       if(!origin) return callback(null,true);
+
+       const isAllowed = allowedOrigins.includes(origin);
+       if(isAllowed){
+        return callback(null,true);
+       }
+       console.warn(`CORS policy: Origin ${origin} not allowed`);
+       return callback(new Error("CORS policy: This origin is not allowed"));
+    },
+    credentials: true,
   })
 );
 
@@ -89,7 +100,7 @@ app.use("/", authRoute);
 let isConnected=false;
 async function connectToMongoDB(){
   try{
-    await mongoose.connect(process.env.MONGO_URI,{
+    await mongoose.connect(process.env.MONGO_URL,{
       useNewUrlParser:true,
       useUnifiedTopology:true,
     });
