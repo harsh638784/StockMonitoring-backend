@@ -59,7 +59,7 @@ module.exports.Logout = (req, res) => {
   // clearCookie ka istemal karein
   res.clearCookie('token', {
     httpOnly: true,
-    secure: false, // Development ke liye false, Production (HTTPS) ke liye true
+    secure: true, // Development ke liye false, Production (HTTPS) ke liye true
     sameSite: 'none',
     // path: '/' // Agar aapne login ke waqt path set kiya tha to yahan bhi karein
   });

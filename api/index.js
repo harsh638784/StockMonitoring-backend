@@ -30,19 +30,14 @@ app.use(express.json());
 const allowedOrigins = ["http://localhost:3000","https://stock-monitoring-frontend.vercel.app"];
 app.use(
   cors({
-    origin: (origin, callback) => {
-       if(!origin) return callback(null,true);
-
-       const isAllowed = allowedOrigins.includes(origin);
-       if(isAllowed){
-        return callback(null,true);
-       }
-       console.warn(`CORS policy: Origin ${origin} not allowed`);
-       return callback(new Error("CORS policy: This origin is not allowed"));
-    },
+    origin: [
+      "http://localhost:3000",
+      "https://stock-monitoring-frontend.vercel.app"
+    ],
     credentials: true,
   })
 );
+
 
 // ==============================
 //  API Endpoints
@@ -112,13 +107,12 @@ async function connectToMongoDB(){
 } 
 
 //add middleware
-app.use((req,res,next)=>{
-  if(!isConnected){
-    connectToMongoDB().then(()=>{
-      next();
-    });
+app.use(async (req, res, next) => {
+  if (!isConnected) {
+    await connectToMongoDB();
   }
-})
+  next();
+});
 
 
 //  Server Start
