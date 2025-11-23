@@ -27,7 +27,7 @@ const authRoute = require("../Routes/AuthRoute");
 app.use(cookieParser());
 app.use(express.json());
 
-const allowedOrigins = ["http://localhost:3000", "https://stock-monitoring-backend-gamma.vercel.app"];
+const allowedOrigins = ["http://localhost:3000","https://stock-monitoring-frontend.vercel.app"];
 app.use(
   cors({
     origin: (origin, callback) => {
