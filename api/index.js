@@ -118,4 +118,4 @@ app.use(async (req, res, next) => {
 //   console.log(`🚀 Server running at http://localhost:${PORT}`);
 // });
 
-export default app;
+module.exports = app;
