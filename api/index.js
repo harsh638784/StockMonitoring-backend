@@ -25,25 +25,16 @@ const authRoute = require("../Routes/AuthRoute");
 // ==============================
 //  Middlewares
 // ==============================
+
+app.use(cookieParser());
+app.use(express.json());
 app.use(cors({
   origin: [
     "https://stock-monitoring-frontend.vercel.app",
     "http://localhost:3000"
   ],
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
-// THIS IS MANDATORY (Vercel bug)
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Origin", "https://stock-monitoring-frontend.vercel.app");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
-app.use(cookieParser());
-app.use(express.json());
 
 
 // ==============================
