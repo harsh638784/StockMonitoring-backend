@@ -13,7 +13,7 @@ module.exports.Signup = async (req, res, next) => {
     const token = createSecretToken(user._id);
    res.cookie("token", token, {
   httpOnly: true,      // more secure
-  secure: false,       // use true if using HTTPS
+  secure: true,       // use true if using HTTPS
   sameSite: "lax",     // helps prevent CSRF
 });
 
@@ -42,7 +42,7 @@ module.exports.Login = async (req, res, next) => {
      const token = createSecretToken(user._id);
      res.cookie("token", token, {
      httpOnly: true,      // more secure
-     secure: false,       // use true if using HTTPS
+     secure: true,       // use true if using HTTPS
      sameSite: "lax",     // helps prevent CSRF
      });
 
