@@ -8,6 +8,7 @@ require("dotenv").config();
 const app = express();
 const PORT = 4000;
 const { MONGO_URL } = process.env;
+app.set("trust proxy", 1);
 
 // ==============================
 //  Models
@@ -26,7 +27,6 @@ const authRoute = require("../Routes/AuthRoute");
 // ==============================
 app.use(cookieParser());
 app.use(express.json());
-
 const allowedOrigins = ["http://localhost:3000","https://stock-monitoring-frontend.vercel.app"];
 app.use(
   cors({
