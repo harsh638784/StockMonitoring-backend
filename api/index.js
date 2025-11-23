@@ -25,15 +25,11 @@ const authRoute = require("../Routes/AuthRoute");
 // ==============================
 app.use(cookieParser());
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "https://stock-monitoring-frontend.vercel.app",
-      "http://localhost:3000",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: "https://stock-monitoring-frontend.vercel.app",
+  credentials: true,
+}));
+
 
 // ==============================
 //  MongoDB connection
@@ -49,6 +45,10 @@ mongoose
 // ==============================
 //  API Endpoints
 // ==============================
+app.get("/checkCookie", (req, res) => {
+  console.log(req.cookies);
+  res.json({ cookies: req.cookies });
+});
 app.get("/allHoldings", async (req, res) => {
   try {
     const allHoldings = await HoldingsModel.find({});
